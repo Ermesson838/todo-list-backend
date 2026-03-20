@@ -1,13 +1,17 @@
 from fastapi import FastAPI
+from sentry_sdk.envelope import Item
+
+from todolist.list_item import ListItem
 
 app = FastAPI()
+itens = []
 
 
-@app.get("/")
+@app.get("/items")
 def read_root():
-    return {"Hello": "World"}
+    return itens
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/items")
+def create_item(item: ListItem):
+    itens.append(item)
+    return item
